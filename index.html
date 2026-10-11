@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador Imóveis — Alienação, Locação e Hospedagem | Reforma Tributária</title>
+<style>
+:root{--navy:#0f2c4d;--navy2:#0a1f38;--gold:#c9a24a;--gold2:#a8822f;--bg:#f5f0e6;--card:#fffdf8;--line:#e7ddc8;--ink:#1a2b4a;--mut:#6b7280}
+*{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{margin:0;background:var(--bg);color:var(--ink);padding:0}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:34px 20px 26px;border-bottom:4px solid var(--gold)}
+.hero-inner{max-width:1000px;margin:auto}
+.brand{letter-spacing:.35em;font-size:.75rem;color:var(--gold);font-weight:600}
+.hero h1{font-family:Georgia,'Times New Roman',serif;font-size:2rem;margin:10px 0 6px;font-weight:800}
+.hero h1 span{font-weight:400;font-size:1rem;opacity:.85;font-family:'Segoe UI',Arial,sans-serif}
+.hero .sub{color:#d6dbe4;font-size:.92rem;max-width:760px;line-height:1.5}
+.hero .sub a{color:#fff}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.pill{border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:5px 12px;font-size:.78rem;color:#e8ecf3}
+.pill b{color:var(--gold)}
+.wrap{max-width:1000px;margin:auto;padding:20px}
+.topbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.topbar button{width:auto;padding:8px 16px;font-size:.85rem;margin:0;border-radius:20px;cursor:pointer;font-weight:600}
+.btn-navy{background:var(--navy);color:#fff;border:1px solid var(--navy)}
+.btn-ghost{background:#fff;border:1px solid var(--line);color:var(--navy)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.hero h1{font-size:1.5rem}}
+.card{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:10px;padding:18px;box-shadow:0 2px 10px rgba(15,44,77,.06)}
+label{display:block;font-size:.78rem;color:var(--navy);margin:12px 0 4px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+input,select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid #d8cdb4;background:#fff;color:var(--ink);font-size:1rem}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:480px){.row{grid-template-columns:1fr}}
+button.primary{margin-top:16px;width:100%;padding:13px;border:0;border-radius:24px;background:var(--navy);color:#fff;font-weight:700;font-size:1rem;cursor:pointer}
+button.primary:hover{background:#163a63}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.res{font-size:2rem;font-weight:800;color:var(--navy);font-family:Georgia,serif}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
+td{padding:8px 4px;border-bottom:1px solid var(--line)} td:last-child{text-align:right}
+.neg{color:#b91c1c} .mut{color:var(--mut);font-size:.8rem}
+.badge{display:inline-block;background:var(--navy);color:#fff;padding:4px 12px;border-radius:20px;font-size:.75rem;margin-bottom:8px;font-weight:700;letter-spacing:.03em}
+details{margin-top:12px;font-size:.85rem;color:var(--mut)} summary{cursor:pointer;color:var(--navy);font-weight:600}
+.legal{font-size:.78rem;color:var(--mut);margin-top:14px;line-height:1.5}
+.warn{background:#fef3c7;border:1px solid var(--gold);border-radius:8px;padding:10px;font-size:.82rem;margin-top:10px;color:#713f12}
+.err{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px;font-size:.85rem;margin-top:10px;color:#991b1b}
+body.cliente .tec{display:none!important}
+body.cliente .legal{display:none!important}
+@media print{body{background:#fff}.hero{background:#fff!important;color:#000;border-bottom:2px solid #000}.hero .sub,.pill{color:#000;border-color:#000}.card{box-shadow:none}.topbar,.no-print{display:none!important}.res{color:#000}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="hero-inner">
+<div class="brand">VMF CONTABILIDADE</div>
+<h1>Simulador tributário IBS / CBS — Imóveis <span>Alienação · Locação · Hospedagem</span></h1>
+<div class="sub">Espelho didático do Decreto 12.955/2026 e Res. CGIBS 6/2026 — Cap. V Bens Imóveis + Hotelaria · LC 214/2025</div>
+<div class="pills"><span class="pill">Fonte: <b>Decreto 12.955 + CGIBS 6</b></span><span class="pill">Alienação <b>−50%</b></span><span class="pill">Locação <b>−70%</b></span><span class="pill">Hospedagem <b>−40%</b></span></div>
+</div></div>
+<div class="wrap">
+<div class="topbar no-print">
+<button class="btn-navy" id="bModo" onclick="modo()">Modo: Escritório</button>
+<button class="btn-ghost" onclick="window.print()">Exportar PDF / Imprimir</button>
+<button class="btn-ghost" onclick="teste()">Valores-limite</button>
+</div>
+<div class="grid">
+<div class="card">
+<span class="badge">ENTRADAS</span>
+<label for="oper">Tipo de operação</label>
+<select id="oper" onchange="toggle()">
+<option value="alien">Alienação — redutor ajuste + social, −50% (art. 379)</option>
+<option value="loc">Locação mensal — exclusões + R$600 social, −70% (arts. 364/377/379)</option>
+<option value="hosp">Hospedagem ≤90 dias — como hotelaria, −40% (arts. 361/410/405)</option>
+</select>
+
+<div id="fAli">
+<label for="venda">Valor de venda (R$)</label>
+<input id="venda" type="number" value="500000" min="0" step="1000">
+<label for="redutor">Redutor de ajuste (R$) — arts. 369-375</label>
+<input id="redutor" type="number" value="300000" min="0" step="1000">
+<details class="tec"><summary>Calculadora auxiliar do redutor — clique para compor</summary>
+<div class="row"><div><label>Aquisição atualizada (R$)</label><input id="a_aq" type="number" value="280000" min="0"></div>
+<div><label>Correção IPCA adicional (%)</label><input id="a_ipca" type="number" value="0" min="0" max="1000" step="0.1"></div></div>
+<div class="row"><div><label>ITBI + laudêmio (R$)</label><input id="a_itbi" type="number" value="15000" min="0"></div>
+<div><label>Outorgas/contrapartidas (R$)</label><input id="a_out" type="number" value="5000" min="0"></div></div>
+<button class="btn-ghost no-print" onclick="compRed()">Aplicar soma ao redutor</button>
+</details>
+<label for="tipo">Redutor social — art. 376</label>
+<select id="tipo">
+<option value="0">Outros/usado/comercial — sem redutor</option>
+<option value="100000">Residencial novo — R$ 100.000</option>
+<option value="30000">Lote residencial — R$ 30.000</option>
+</select>
+</div>
+
+<div id="fLoc" style="display:none">
+<label for="aluguel">Aluguel bruto mensal cobrado (R$)</label>
+<input id="aluguel" type="number" value="3000" min="0" step="50">
+<div class="row"><div><label>Tributos/emolumentos (R$) — art.364 §3º I</label><input id="l_trib" type="number" value="200" min="0"></div>
+<div><label>Condomínio (R$) — II</label><input id="l_cond" type="number" value="500" min="0"></div></div>
+<div class="row"><div><label>Foro/taxa ocupação (R$) — III</label><input id="l_foro" type="number" value="0" min="0"></div>
+<div><label>% área residencial (0-100)</label><input id="l_perc" type="number" value="100" min="0" max="100"></div></div>
+<label for="l_tipo">Uso do imóvel</label>
+<select id="l_tipo"><option value="res">Residencial — R$600 social (art.377)</option><option value="nres">Não residencial — sem social</option></select>
+<p class="mut tec">Exclusões só se suportadas pelo locatário com prova inequívoca (§4º). Benfeitoria do locatário não deduz (§2º). Fato gerador a cada pagamento (art.363 III).</p>
+</div>
+
+<div id="fHosp" style="display:none">
+<label for="vhosp">Valor total hospedagem (R$) — arts. 403/409</label>
+<input id="vhosp" type="number" value="5000" min="0" step="100">
+<label for="dias">Dias (1 a 90)</label>
+<input id="dias" type="number" value="7" min="1" max="90" step="1">
+<p class="mut">Inclui estacionamento/lavanderia/limpeza. Alimentação vai p/ bares e restaurantes.</p>
+</div>
+
+<div class="row">
+<div><label for="cbs">Alíquota CBS padrão % (0-100)</label><input id="cbs" type="number" value="8.8" min="0" max="100" step="0.1"></div>
+<div><label for="ibs">Alíquota IBS padrão % (0-100)</label><input id="ibs" type="number" value="17.7" min="0" max="100" step="0.1"></div>
+</div>
+<label for="regime">Regime do fornecedor</label>
+<select id="regime"><option value="regular">Regular — regime específico aplica</option><option value="nao">Não contribuinte — sem CBS/IBS</option></select>
+<button class="primary" onclick="calc()">Calcular valor a recolher</button>
+<div id="err"></div>
+<p class="mut">Alienação −50% • Locação −70% • Hospedagem −40%. Ref: 8,8+17,7=26,5%.</p>
+</div>
+<div class="card">
+<span class="badge">RESULTADO</span>
+<div id="out" aria-live="polite"></div>
+<div class="legal"><b>Base legal:</b> 359 porta de entrada; 360 rol; 363 fato gerador; 364 base/exclusões; 369-375 ajuste; 376 100k/30k; 377 600/mês; 379 alíquotas; 381-382 sujeição; 361/410 ≤90d=hotelaria; 402-409 hotelaria; 463 transição 3,65%.</div>
+<div id="memoria" class="tec"></div>
+</div>
+</div>
+</div>
+<script>
+const fmt=v=>{try{return (+v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}catch(e){return '—'}};
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+function modo(){const b=document.body;b.classList.toggle('cliente');const c=b.classList.contains('cliente');document.getElementById('bModo').textContent=c?'Modo: Cliente (simplificado)':'Modo: Escritório (técnico)';}
+function toggle(){const o=document.getElementById('oper').value;document.getElementById('fAli').style.display=o==='alien'?'block':'none';document.getElementById('fLoc').style.display=o==='loc'?'block':'none';document.getElementById('fHosp').style.display=o==='hosp'?'block':'none';calc();}
+function compRed(){const aq=Math.max(0,+document.getElementById('a_aq').value||0);const ip=Math.max(0,+document.getElementById('a_ipca').value||0);const it=Math.max(0,+document.getElementById('a_itbi').value||0);const ou=Math.max(0,+document.getElementById('a_out').value||0);const tot=(aq*(1+ip/100))+it+ou;document.getElementById('redutor').value=Math.round(tot);calc();}
+function aliq(id){return clamp(+document.getElementById(id).value||0,0,100);}
+function teste(){const t=[['alien 500k/300k/100k',500000,300000],['hosp 5k/7d',5000,7],['loc 3k bruto',3000,0]];alert('Valores-limite para testar:\n1. Venda 0 + redutor 0 → base 0, imposto 0\n2. Redutor > venda → base 0\n3. Dias 0 ou 91 → erro/aviso\n4. Alíquota >100 → limitada a 100\n5. Aluguel com exclusões > bruto → base 0');}
+function calc(){
+ const oper=document.getElementById('oper').value, acbs=aliq('cbs'), aibs=aliq('ibs');
+ document.getElementById('cbs').value=acbs; document.getElementById('ibs').value=aibs;
+ const out=document.getElementById('out'), err=document.getElementById('err'), mem=document.getElementById('memoria');
+ err.innerHTML=''; mem.innerHTML='';
+ if(document.getElementById('regime').value!=='regular'){out.innerHTML='<p class="neg"><b>Fora do regime específico (art.359).</b></p><p class="mut">Verifique art.382.</p>';return;}
+ let base=0, cbsV=0, ibsV=0, html='';
+ if(oper==='hosp'){
+  const v=Math.max(0,+document.getElementById('vhosp').value||0), d=Math.floor(+document.getElementById('dias').value||0);
+  if(d<1||d>90){err.innerHTML='<div class="err">Dias deve ser 1 a 90. Acima disso use Locação mensal.</div>';out.innerHTML='';return;}
+  if(v===0){err.innerHTML='<div class="err">Base zero — nada a recolher.</div>';}
+  base=v; cbsV=base*acbs/100*0.6; ibsV=base*aibs/100*0.6;
+  html=`<div class="res">${fmt(cbsV+ibsV)}</div><p class="mut">efetiva ${((acbs+aibs)*0.6).toFixed(2)}% sobre ${fmt(v)} em ${d} dias (${fmt(v/d)}/dia)</p><table><tr><td>Base (403/409)</td><td>${fmt(v)}</td></tr><tr><td>CBS</td><td>${fmt(cbsV)}</td></tr><tr><td>IBS</td><td>${fmt(ibsV)}</td></tr></table>`;
+  mem.innerHTML='<details open><summary>Memória técnica</summary><p>361+410: ≤90d = hotelaria. Sem ajuste/social. Fornecedor credita (406), hóspede não (407).</p></details>';
+ } else if(oper==='loc'){
+  const bru=Math.max(0,+document.getElementById('aluguel').value||0);
+  const ex=Math.max(0,+document.getElementById('l_trib').value||0)+Math.max(0,+document.getElementById('l_cond').value||0)+Math.max(0,+document.getElementById('l_foro').value||0);
+  const perc=clamp(+document.getElementById('l_perc').value||0,0,100);
+  const isRes=document.getElementById('l_tipo').value==='res';
+  const liq=Math.max(0,bru-ex);
+  const soc=isRes?Math.min(600*perc/100,liq):0;
+  base=Math.max(0,liq-soc); cbsV=base*acbs/100*0.3; ibsV=base*aibs/100*0.3;
+  if(base===0)err.innerHTML='<div class="err">Base zerada após exclusões/social — nada a recolher.</div>';
+  html=`<div class="res">${fmt(cbsV+ibsV)}</div><p class="mut">efetiva ${((acbs+aibs)*0.3).toFixed(2)}% • base ${fmt(base)}</p><table><tr><td>Bruto</td><td>${fmt(bru)}</td></tr><tr><td>(−) Exclusões §3º</td><td class="neg">− ${fmt(Math.min(ex,bru))}</td></tr><tr><td>(−) Social 600×${perc}%</td><td class="neg">− ${fmt(soc)}</td></tr><tr><td><b>Base</b></td><td><b>${fmt(base)}</b></td></tr><tr><td>CBS</td><td>${fmt(cbsV)}</td></tr><tr><td>IBS</td><td>${fmt(ibsV)}</td></tr></table>`;
+  mem.innerHTML='<details open><summary>Memória técnica</summary><p>364 II + §3º/§4º exclusões com prova; 377 600/mês proporcional à área; 379 −70%; 363 III a cada pagamento.</p></details>';
+ } else {
+  const venda=Math.max(0,+document.getElementById('venda').value||0), red=Math.max(0,+document.getElementById('redutor').value||0), tet=Math.max(0,+document.getElementById('tipo').value||0);
+  const soc=Math.min(tet,Math.max(0,venda-red)); base=Math.max(0,venda-red-soc);
+  cbsV=base*acbs/100*0.5; ibsV=base*aibs/100*0.5;
+  if(base===0)err.innerHTML='<div class="err">Base zerada após redutores — nada a recolher. Verifique se redutor &gt; venda.</div>';
+  html=`<div class="res">${fmt(cbsV+ibsV)}</div><p class="mut">efetiva ${((acbs+aibs)*0.5).toFixed(2)}%</p><table><tr><td>Venda</td><td>${fmt(venda)}</td></tr><tr><td>(−) Ajuste</td><td class="neg">− ${fmt(Math.min(red,venda))}</td></tr><tr><td>(−) Social</td><td class="neg">− ${fmt(soc)}</td></tr><tr><td><b>Base</b></td><td><b>${fmt(base)}</b></td></tr><tr><td>CBS</td><td>${fmt(cbsV)}</td></tr><tr><td>IBS</td><td>${fmt(ibsV)}</td></tr></table>`;
+  mem.innerHTML='<details open><summary>Memória técnica</summary><p>364 I; 369-375 ajuste antes do social; 376 1x/imóvel IPCA; 379 −50%; 371 mantém se comprador regular.</p></details>';
+ }
+ out.innerHTML=html;
+}
+toggle();
+</script>
+</body>
+</html>
