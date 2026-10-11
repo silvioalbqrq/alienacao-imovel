@@ -44,7 +44,27 @@ details{margin-top:12px;font-size:.85rem;color:var(--mut)} summary{cursor:pointe
 .err{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px;font-size:.85rem;margin-top:10px;color:#991b1b}
 body.cliente .tec{display:none!important}
 body.cliente .legal{display:none!important}
-@media print{body{background:#fff}.hero{background:#fff!important;color:#000;border-bottom:2px solid #000}.hero .sub,.pill{color:#000;border-color:#000}.card{box-shadow:none}.topbar,.no-print{display:none!important}.res{color:#000}}
+@media print{
+@page{size:A4;margin:8mm}
+html,body{background:#fff!important}
+body{font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.hero{background:#0f2c4d!important;color:#fff!important;padding:12px 16px 10px;border-bottom:3px solid var(--gold)}
+.hero h1{font-size:1.15rem;margin:4px 0}
+.hero h1 span{font-size:.8rem}
+.hero .sub{font-size:.75rem;color:#e8ecf3!important}
+.pills{display:none!important}
+.wrap{padding:8px 0;max-width:100%}
+.topbar,.no-print,#err button{display:none!important}
+.grid{grid-template-columns:1fr 1fr!important;gap:10px}
+.card{padding:10px;box-shadow:none;break-inside:avoid;page-break-inside:avoid}
+label{margin:6px 0 2px;font-size:.66rem}
+input,select{padding:5px 7px;font-size:.82rem}
+button.primary{display:none!important}
+.res{font-size:1.35rem;color:#000!important}
+table{font-size:.75rem;margin-top:6px} td{padding:3px 2px}
+details{margin-top:6px;font-size:.72rem} .legal{font-size:.68rem;margin-top:6px}
+.warn,.err{font-size:.72rem;padding:6px}
+}
 </style>
 </head>
 <body>
@@ -57,7 +77,7 @@ body.cliente .legal{display:none!important}
 <div class="wrap">
 <div class="topbar no-print">
 <button class="btn-navy" id="bModo" onclick="modo()">Modo: Escritório</button>
-<button class="btn-ghost" onclick="window.print()">Exportar PDF / Imprimir</button>
+<button class="btn-ghost" onclick="exportar()">Exportar PDF / Imprimir</button>
 <button class="btn-ghost" onclick="teste()">Valores-limite</button>
 </div>
 <div class="grid">
@@ -136,6 +156,17 @@ function toggle(){const o=document.getElementById('oper').value;document.getElem
 function compRed(){const aq=Math.max(0,+document.getElementById('a_aq').value||0);const ip=Math.max(0,+document.getElementById('a_ipca').value||0);const it=Math.max(0,+document.getElementById('a_itbi').value||0);const ou=Math.max(0,+document.getElementById('a_out').value||0);const tot=(aq*(1+ip/100))+it+ou;document.getElementById('redutor').value=Math.round(tot);calc();}
 function aliq(id){return clamp(+document.getElementById(id).value||0,0,100);}
 function teste(){const t=[['alien 500k/300k/100k',500000,300000],['hosp 5k/7d',5000,7],['loc 3k bruto',3000,0]];alert('Valores-limite para testar:\n1. Venda 0 + redutor 0 → base 0, imposto 0\n2. Redutor > venda → base 0\n3. Dias 0 ou 91 → erro/aviso\n4. Alíquota >100 → limitada a 100\n5. Aluguel com exclusões > bruto → base 0');}
+function exportar(){
+ try{
+  if(window.self!==window.top){
+   window.open(window.location.href,'_blank','noopener');
+   const e=document.getElementById('err');
+   if(e) e.innerHTML='<div class="warn">Impressão bloqueada dentro do Hub Fiscal (iframe). Abrimos o simulador em nova aba — clique lá em Exportar PDF / Imprimir.</div>';
+   return;
+  }
+ }catch(err){ try{window.open(window.location.href,'_blank','noopener');}catch(e2){} return; }
+ window.print();
+}
 function calc(){
  const oper=document.getElementById('oper').value, acbs=aliq('cbs'), aibs=aliq('ibs');
  document.getElementById('cbs').value=acbs; document.getElementById('ibs').value=aibs;
