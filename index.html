@@ -76,15 +76,15 @@ details{margin-top:6px;font-size:.72rem} .legal{font-size:.68rem;margin-top:6px}
 </div></div>
 <div class="wrap">
 <div class="topbar no-print">
-<button class="btn-navy" id="bModo" onclick="modo()">Modo: Escritório</button>
-<button class="btn-ghost" onclick="exportar()">Exportar PDF / Imprimir</button>
-<button class="btn-ghost" onclick="teste()">Valores-limite</button>
+<button class="btn-navy" id="bModo" type="button">Modo: Escritório</button>
+<button class="btn-ghost" id="bExp" type="button">Exportar PDF / Imprimir</button>
+<button class="btn-ghost" id="bTeste" type="button">Valores-limite</button>
 </div>
 <div class="grid">
 <div class="card">
 <span class="badge">ENTRADAS</span>
 <label for="oper">Tipo de operação</label>
-<select id="oper" onchange="toggle()">
+<select id="oper">
 <option value="alien">Alienação — redutor ajuste + social, −50% (art. 379)</option>
 <option value="loc">Locação mensal — exclusões + R$600 social, −70% (arts. 364/377/379)</option>
 <option value="hosp">Hospedagem ≤90 dias — como hotelaria, −40% (arts. 361/410/405)</option>
@@ -96,11 +96,11 @@ details{margin-top:6px;font-size:.72rem} .legal{font-size:.68rem;margin-top:6px}
 <label for="redutor">Redutor de ajuste (R$) — arts. 369-375</label>
 <input id="redutor" type="number" value="300000" min="0" step="1000">
 <details class="tec"><summary>Calculadora auxiliar do redutor — clique para compor</summary>
-<div class="row"><div><label>Aquisição atualizada (R$)</label><input id="a_aq" type="number" value="280000" min="0"></div>
-<div><label>Correção IPCA adicional (%)</label><input id="a_ipca" type="number" value="0" min="0" max="1000" step="0.1"></div></div>
-<div class="row"><div><label>ITBI + laudêmio (R$)</label><input id="a_itbi" type="number" value="15000" min="0"></div>
-<div><label>Outorgas/contrapartidas (R$)</label><input id="a_out" type="number" value="5000" min="0"></div></div>
-<button class="btn-ghost no-print" onclick="compRed()">Aplicar soma ao redutor</button>
+<div class="row"><div><label for="a_aq">Aquisição atualizada (R$)</label><input id="a_aq" type="number" value="280000" min="0"></div>
+<div><label for="a_ipca">Correção IPCA adicional (%)</label><input id="a_ipca" type="number" value="0" min="0" max="1000" step="0.1"></div></div>
+<div class="row"><div><label for="a_itbi">ITBI + laudêmio (R$)</label><input id="a_itbi" type="number" value="15000" min="0"></div>
+<div><label for="a_out">Outorgas/contrapartidas (R$)</label><input id="a_out" type="number" value="5000" min="0"></div></div>
+<button class="btn-ghost no-print" id="bCompRed" type="button">Aplicar soma ao redutor</button>
 </details>
 <label for="tipo">Redutor social — art. 376</label>
 <select id="tipo">
@@ -113,10 +113,10 @@ details{margin-top:6px;font-size:.72rem} .legal{font-size:.68rem;margin-top:6px}
 <div id="fLoc" style="display:none">
 <label for="aluguel">Aluguel bruto mensal cobrado (R$)</label>
 <input id="aluguel" type="number" value="3000" min="0" step="50">
-<div class="row"><div><label>Tributos/emolumentos (R$) — art.364 §3º I</label><input id="l_trib" type="number" value="200" min="0"></div>
-<div><label>Condomínio (R$) — II</label><input id="l_cond" type="number" value="500" min="0"></div></div>
-<div class="row"><div><label>Foro/taxa ocupação (R$) — III</label><input id="l_foro" type="number" value="0" min="0"></div>
-<div><label>% área residencial (0-100)</label><input id="l_perc" type="number" value="100" min="0" max="100"></div></div>
+<div class="row"><div><label for="l_trib">Tributos/emolumentos (R$) — art.364 §3º I</label><input id="l_trib" type="number" value="200" min="0"></div>
+<div><label for="l_cond">Condomínio (R$) — II</label><input id="l_cond" type="number" value="500" min="0"></div></div>
+<div class="row"><div><label for="l_foro">Foro/taxa ocupação (R$) — III</label><input id="l_foro" type="number" value="0" min="0"></div>
+<div><label for="l_perc">% área residencial (0-100)</label><input id="l_perc" type="number" value="100" min="0" max="100"></div></div>
 <label for="l_tipo">Uso do imóvel</label>
 <select id="l_tipo"><option value="res">Residencial — R$600 social (art.377)</option><option value="nres">Não residencial — sem social</option></select>
 <p class="mut tec">Exclusões só se suportadas pelo locatário com prova inequívoca (§4º). Benfeitoria do locatário não deduz (§2º). Fato gerador a cada pagamento (art.363 III).</p>
@@ -136,7 +136,7 @@ details{margin-top:6px;font-size:.72rem} .legal{font-size:.68rem;margin-top:6px}
 </div>
 <label for="regime">Regime do fornecedor</label>
 <select id="regime"><option value="regular">Regular — regime específico aplica</option><option value="nao">Não contribuinte — sem CBS/IBS</option></select>
-<button class="primary" onclick="calc()">Calcular valor a recolher</button>
+<button class="primary" id="bCalc">Calcular valor a recolher</button>
 <div id="err"></div>
 <p class="mut">Alienação −50% • Locação −70% • Hospedagem −40%. Ref: 8,8+17,7=26,5%.</p>
 </div>
@@ -149,61 +149,71 @@ details{margin-top:6px;font-size:.72rem} .legal{font-size:.68rem;margin-top:6px}
 </div>
 </div>
 <script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 const fmt=v=>{try{return (+v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}catch(e){return '—'}};
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
-function modo(){const b=document.body;b.classList.toggle('cliente');const c=b.classList.contains('cliente');document.getElementById('bModo').textContent=c?'Modo: Cliente (simplificado)':'Modo: Escritório (técnico)';}
-function toggle(){const o=document.getElementById('oper').value;document.getElementById('fAli').style.display=o==='alien'?'block':'none';document.getElementById('fLoc').style.display=o==='loc'?'block':'none';document.getElementById('fHosp').style.display=o==='hosp'?'block':'none';calc();}
-function compRed(){const aq=Math.max(0,+document.getElementById('a_aq').value||0);const ip=Math.max(0,+document.getElementById('a_ipca').value||0);const it=Math.max(0,+document.getElementById('a_itbi').value||0);const ou=Math.max(0,+document.getElementById('a_out').value||0);const tot=(aq*(1+ip/100))+it+ou;document.getElementById('redutor').value=Math.round(tot);calc();}
-function aliq(id){return clamp(+document.getElementById(id).value||0,0,100);}
-function teste(){const t=[['alien 500k/300k/100k',500000,300000],['hosp 5k/7d',5000,7],['loc 3k bruto',3000,0]];alert('Valores-limite para testar:\n1. Venda 0 + redutor 0 → base 0, imposto 0\n2. Redutor > venda → base 0\n3. Dias 0 ou 91 → erro/aviso\n4. Alíquota >100 → limitada a 100\n5. Aluguel com exclusões > bruto → base 0');}
+const num=(id,fb)=>{const el=$(id);if(!el)return fb||0;const n=+el.value;return Number.isFinite(n)?n:(fb||0);};
+function modo(){const b=document.body;b.classList.toggle('cliente');const c=b.classList.contains('cliente');const bm=$('bModo');if(bm)bm.textContent=c?'Modo: Cliente (simplificado)':'Modo: Escritório (técnico)';}
+function toggle(){const o=$('oper');if(!o)return;const v=o.value;const fa=$('fAli'),fl=$('fLoc'),fh=$('fHosp');if(fa)fa.style.display=v==='alien'?'block':'none';if(fl)fl.style.display=v==='loc'?'block':'none';if(fh)fh.style.display=v==='hosp'?'block':'none';calc();}
+function compRed(){const aq=Math.max(0,num('a_aq',0));const ip=clamp(num('a_ipca',0),0,1000);const it=Math.max(0,num('a_itbi',0));const ou=Math.max(0,num('a_out',0));const tot=(aq*(1+ip/100))+it+ou;const r=$('redutor');if(r)r.value=(Math.round(tot*100)/100);calc();}
+function aliq(id){return clamp(num(id,0),0,100);}
+function teste(){alert('Valores-limite para testar:\n1. Venda 0 + redutor 0 → base 0, imposto 0\n2. Redutor > venda → base 0\n3. Dias 0 ou 91 → erro/aviso\n4. Alíquota >100 → limitada a 100\n5. Aluguel com exclusões > bruto → base 0');}
 function exportar(){
  calc();
- const oper=document.getElementById('oper');
- const operTxt=oper.options[oper.selectedIndex].text;
- const res=document.getElementById('out').innerHTML;
- const mem=document.getElementById('memoria').innerText||'';
+ const oper=$('oper');
+ const operTxt=oper&&oper.selectedIndex>=0?oper.options[oper.selectedIndex].text:'';
+ const res=$('out')?$('out').innerHTML:'';
+ const mem=$('memoria')?$('memoria').innerText||'':'';
  const data=new Date().toLocaleString('pt-BR');
- const Kv=id=>{const el=document.getElementById(id);return el?el.value:'';};
+ const Kv=id=>{const el=$(id);return el?el.value:'';};
  const entradas={operacao:operTxt,venda:Kv('venda'),redutor:Kv('redutor'),tipo:Kv('tipo'),aluguel:Kv('aluguel'),trib:Kv('l_trib'),cond:Kv('l_cond'),foro:Kv('l_foro'),perc:Kv('l_perc'),uso:Kv('l_tipo'),vhosp:Kv('vhosp'),dias:Kv('dias'),cbs:Kv('cbs'),ibs:Kv('ibs'),regime:Kv('regime')};
  const doc='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório — Simulador Imóveis IBS/CBS</title><style>body{font-family:Arial,sans-serif;max-width:720px;margin:20px auto;color:#111}h1{font-size:18px;color:#0f2c4d;border-bottom:3px solid #c9a24a;padding-bottom:8px}table{width:100%;border-collapse:collapse;margin:12px 0}td{border-bottom:1px solid #ddd;padding:6px;font-size:13px}td:last-child{text-align:right}.res{font-size:26px;font-weight:800;color:#0f2c4d}.mut{color:#555;font-size:12px}.box{border:1px solid #c9a24a;border-radius:8px;padding:12px;margin:12px 0}@media print{@page{size:A4;margin:10mm}}</style></head><body>'
- +'<h1>VMF Contabilidade — Relatório IBS/CBS Imóveis</h1><p class="mut">Gerado em '+data+' · Dec. 12.955/2026 + Res. CGIBS 6/2026 · LC 214/2025</p>'
- +'<div class="box"><b>Operação:</b> '+operTxt.replace(/</g,'&lt;')+'<br><span class="mut">Entradas: '+JSON.stringify(entradas).replace(/</g,'&lt;')+'</span></div>'
+ +'<h1>VMF Contabilidade — Relatório IBS/CBS Imóveis</h1><p class="mut">Gerado em '+esc(data)+' · Dec. 12.955/2026 + Res. CGIBS 6/2026 · LC 214/2025</p>'
+ +'<div class="box"><b>Operação:</b> '+esc(operTxt)+'<br><span class="mut">Entradas: '+esc(JSON.stringify(entradas))+'</span></div>'
  +'<div class="box">'+res+'</div>'
- +'<p class="mut">'+mem.replace(/</g,'&lt;').slice(0,2000)+'</p>'
+ +'<p class="mut">'+esc(mem).slice(0,2000)+'</p>'
  +'<p class="mut">Documento de estudo/simulação — não substitui parecer fiscal.</p>'
  +'<script>window.onload=function(){window.print();};<\/script></body></html>';
  try{
   const blob=new Blob([doc],{type:'text/html;charset=utf-8'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
-  a.download='relatorio-imoveis-ibs-cbs.html';
+  a.rel='noopener';
+  const ts=new Date();const pad=n=>String(n).padStart(2,'0');
+  a.download='relatorio-imoveis-ibs-cbs-'+ts.getFullYear()+pad(ts.getMonth()+1)+pad(ts.getDate())+'-'+pad(ts.getHours())+pad(ts.getMinutes())+'.html';
   document.body.appendChild(a); a.click();
   setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},2000);
-  const e=document.getElementById('err');
+  const e=$('err');
   if(e) e.innerHTML='<div class="warn">Relatório gerado e baixado. Abra o arquivo para imprimir em PDF (1 página). Se o navegador bloqueou o download, use Nova aba no Hub.</div>';
  }catch(err){
   try{window.print();}catch(e2){}
  }
 }
 function calc(){
- const oper=document.getElementById('oper').value, acbs=aliq('cbs'), aibs=aliq('ibs');
- document.getElementById('cbs').value=acbs; document.getElementById('ibs').value=aibs;
- const out=document.getElementById('out'), err=document.getElementById('err'), mem=document.getElementById('memoria');
+ const operEl=$('oper');if(!operEl)return;
+ const oper=operEl.value, acbs=aliq('cbs'), aibs=aliq('ibs');
+ const cbsEl=$('cbs'), ibsEl=$('ibs');
+ if(cbsEl)cbsEl.value=acbs; if(ibsEl)ibsEl.value=aibs;
+ const out=$('out'), err=$('err'), mem=$('memoria');
+ if(!out||!err||!mem)return;
  err.innerHTML=''; mem.innerHTML='';
- if(document.getElementById('regime').value!=='regular'){out.innerHTML='<p class="neg"><b>Fora do regime específico (art.359).</b></p><p class="mut">Verifique art.382.</p>';return;}
+ const reg=$('regime');
+ if(!reg||reg.value!=='regular'){out.innerHTML='<p class="neg"><b>Fora do regime específico (art.359).</b></p><p class="mut">Verifique art.382.</p>';return;}
  let base=0, cbsV=0, ibsV=0, html='';
  if(oper==='hosp'){
-  const v=Math.max(0,+document.getElementById('vhosp').value||0), d=Math.floor(+document.getElementById('dias').value||0);
-  if(d<1||d>90){err.innerHTML='<div class="err">Dias deve ser 1 a 90. Acima disso use Locação mensal.</div>';out.innerHTML='';return;}
+  const v=Math.max(0,num('vhosp',0)), rawDias=num('dias',0);
+  if(!Number.isInteger(rawDias)||rawDias<1||rawDias>90){err.innerHTML='<div class="err">Dias deve ser 1 a 90 (número inteiro). Acima disso use Locação mensal.</div>';out.innerHTML='';return;}
+  const d=rawDias;
   if(v===0){err.innerHTML='<div class="err">Base zero — nada a recolher.</div>';}
   base=v; cbsV=base*acbs/100*0.6; ibsV=base*aibs/100*0.6;
   html=`<div class="res">${fmt(cbsV+ibsV)}</div><p class="mut">efetiva ${((acbs+aibs)*0.6).toFixed(2)}% sobre ${fmt(v)} em ${d} dias (${fmt(v/d)}/dia)</p><table><tr><td>Base (403/409)</td><td>${fmt(v)}</td></tr><tr><td>CBS</td><td>${fmt(cbsV)}</td></tr><tr><td>IBS</td><td>${fmt(ibsV)}</td></tr></table>`;
   mem.innerHTML='<details open><summary>Memória técnica</summary><p>361+410: ≤90d = hotelaria. Sem ajuste/social. Fornecedor credita (406), hóspede não (407).</p></details>';
  } else if(oper==='loc'){
-  const bru=Math.max(0,+document.getElementById('aluguel').value||0);
-  const ex=Math.max(0,+document.getElementById('l_trib').value||0)+Math.max(0,+document.getElementById('l_cond').value||0)+Math.max(0,+document.getElementById('l_foro').value||0);
-  const perc=clamp(+document.getElementById('l_perc').value||0,0,100);
-  const isRes=document.getElementById('l_tipo').value==='res';
+  const bru=Math.max(0,num('aluguel',0));
+  const ex=Math.max(0,num('l_trib',0))+Math.max(0,num('l_cond',0))+Math.max(0,num('l_foro',0));
+  const perc=clamp(num('l_perc',0),0,100);
+  const lt=$('l_tipo');const isRes=lt?lt.value==='res':true;
   const liq=Math.max(0,bru-ex);
   const soc=isRes?Math.min(600*perc/100,liq):0;
   base=Math.max(0,liq-soc); cbsV=base*acbs/100*0.3; ibsV=base*aibs/100*0.3;
@@ -211,7 +221,7 @@ function calc(){
   html=`<div class="res">${fmt(cbsV+ibsV)}</div><p class="mut">efetiva ${((acbs+aibs)*0.3).toFixed(2)}% • base ${fmt(base)}</p><table><tr><td>Bruto</td><td>${fmt(bru)}</td></tr><tr><td>(−) Exclusões §3º</td><td class="neg">− ${fmt(Math.min(ex,bru))}</td></tr><tr><td>(−) Social 600×${perc}%</td><td class="neg">− ${fmt(soc)}</td></tr><tr><td><b>Base</b></td><td><b>${fmt(base)}</b></td></tr><tr><td>CBS</td><td>${fmt(cbsV)}</td></tr><tr><td>IBS</td><td>${fmt(ibsV)}</td></tr></table>`;
   mem.innerHTML='<details open><summary>Memória técnica</summary><p>364 II + §3º/§4º exclusões com prova; 377 600/mês proporcional à área; 379 −70%; 363 III a cada pagamento.</p></details>';
  } else {
-  const venda=Math.max(0,+document.getElementById('venda').value||0), red=Math.max(0,+document.getElementById('redutor').value||0), tet=Math.max(0,+document.getElementById('tipo').value||0);
+  const venda=Math.max(0,num('venda',0)), red=Math.max(0,num('redutor',0)), tet=Math.max(0,num('tipo',0));
   const soc=Math.min(tet,Math.max(0,venda-red)); base=Math.max(0,venda-red-soc);
   cbsV=base*acbs/100*0.5; ibsV=base*aibs/100*0.5;
   if(base===0)err.innerHTML='<div class="err">Base zerada após redutores — nada a recolher. Verifique se redutor &gt; venda.</div>';
@@ -220,7 +230,15 @@ function calc(){
  }
  out.innerHTML=html;
 }
-toggle();
+function bindUI(){
+ const bM=$('bModo');if(bM)bM.addEventListener('click',modo);
+ const bE=$('bExp');if(bE)bE.addEventListener('click',exportar);
+ const bT=$('bTeste');if(bT)bT.addEventListener('click',teste);
+ const bC=$('bCalc');if(bC)bC.addEventListener('click',calc);
+ const bR=$('bCompRed');if(bR)bR.addEventListener('click',compRed);
+ const op=$('oper');if(op)op.addEventListener('change',toggle);
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',()=>{bindUI();toggle();});}else{bindUI();toggle();}
 </script>
 </body>
 </html>
