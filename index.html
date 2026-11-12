@@ -3,78 +3,176 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulador Imóveis — Alienação, Locação e Hospedagem | Reforma Tributária</title>
+<title>Simulador tributário IBS / CBS — Imóveis | Alienação, Locação e Hospedagem</title>
+<meta name="description" content="Simulador tributário de IBS e CBS para imóveis: alienação, locação mensal e hospedagem ≤90 dias, com base de cálculo, redutores e alíquotas efetivas.">
+<meta name="theme-color" content="#0b1f3a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="favicon.ico?v=1">
+<link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <style>
-:root{--navy:#0f2c4d;--navy2:#0a1f38;--gold:#c9a24a;--gold2:#a8822f;--bg:#f5f0e6;--card:#fffdf8;--line:#e7ddc8;--ink:#1a2b4a;--mut:#6b7280}
-*{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
-body{margin:0;background:var(--bg);color:var(--ink);padding:0}
-.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:34px 20px 26px;border-bottom:4px solid var(--gold)}
-.hero-inner{max-width:1000px;margin:auto}
-.brand{letter-spacing:.35em;font-size:.75rem;color:var(--gold);font-weight:600}
-.hero h1{font-family:Georgia,'Times New Roman',serif;font-size:2rem;margin:10px 0 6px;font-weight:800}
-.hero h1 span{font-weight:400;font-size:1rem;opacity:.85;font-family:'Segoe UI',Arial,sans-serif}
-.hero .sub{color:#d6dbe4;font-size:.92rem;max-width:760px;line-height:1.5}
-.hero .sub a{color:#fff}
-.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.pill{border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:5px 12px;font-size:.78rem;color:#e8ecf3}
-.pill b{color:var(--gold)}
-.wrap{max-width:1000px;margin:auto;padding:20px}
-.topbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.topbar button{width:auto;padding:8px 16px;font-size:.85rem;margin:0;border-radius:20px;cursor:pointer;font-weight:600}
-.btn-navy{background:var(--navy);color:#fff;border:1px solid var(--navy)}
-.btn-ghost{background:#fff;border:1px solid var(--line);color:var(--navy)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:760px){.grid{grid-template-columns:1fr}.hero h1{font-size:1.5rem}}
-.card{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:10px;padding:18px;box-shadow:0 2px 10px rgba(15,44,77,.06)}
-label{display:block;font-size:.78rem;color:var(--navy);margin:12px 0 4px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
-input,select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid #d8cdb4;background:#fff;color:var(--ink);font-size:1rem}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+:root{
+  --navy:#0b1f3a;--navy2:#12325c;
+  --blue:#2563eb;--blue-dark:#1d4ed8;--blue-soft:#eaf1fe;
+  --emerald:#0f9f6e;--emerald-light:#34d399;--emerald-soft:#e7f7f1;
+  --ink:#152033;--muted:#5f6f85;--line:#dfe7f1;
+  --bg:#e4ecf6;--card:#ffffff;
+  --amber:#93370d;--amberbg:#fffaeb;--amber-line:#f5d9a8;
+  --red:#b42318;--redbg:#fef3f2;--red-line:#f0c8c3;
+  --green:#067a54;--greenbg:#e7f7f1;
+  --radius:16px;
+  --shadow:0 1px 2px rgba(15,37,68,.04),0 14px 34px -14px rgba(15,37,68,.16);
+  --shadow-sm:0 1px 2px rgba(15,37,68,.06);
+  --font:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-family:var(--font);font-weight:800;letter-spacing:-.02em}
+a{color:var(--blue)}
+button,input,select{font:inherit;color:inherit}
+[hidden]{display:none!important}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* ---------- topbar ---------- */
+.corp-bar{background:rgba(255,255,255,.94);backdrop-filter:blur(10px);position:sticky;top:0;z-index:40;border-bottom:1px solid var(--line)}
+.corp-inner{max-width:1120px;margin:0 auto;padding:0 20px}
+.corp-bar .corp-inner{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:64px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
+.corp-brand{display:flex;gap:11px;align-items:center}
+.corp-logo{width:36px;height:36px;border-radius:10px;overflow:hidden;flex:none;display:grid;place-items:center;box-shadow:0 6px 14px -6px rgba(11,31,58,.6)}
+.corp-logo img{width:36px;height:36px;display:block;border-radius:10px}
+.corp-brand strong{font-size:1rem;display:block;line-height:1.2;font-weight:800;letter-spacing:-.02em;color:var(--navy)}
+.corp-brand small{color:var(--muted);font-size:.66rem;font-weight:500;display:block;margin-top:2px}
+.corp-nav{display:flex;gap:10px;align-items:center}
+.btn-top{background:#fff;color:var(--navy);border:1.5px solid var(--line);border-radius:10px;padding:8px 14px;font-weight:700;font-size:.82rem;cursor:pointer;text-decoration:none;display:inline-block;font-family:inherit;transition:border-color .18s,color .18s}
+.btn-top:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;color:#fff;padding:38px 0 48px;border-radius:0 0 26px 26px;
+  background:
+    radial-gradient(900px 420px at 82% -10%,rgba(52,211,153,.20),transparent 62%),
+    radial-gradient(700px 380px at 8% 4%,rgba(37,99,235,.38),transparent 66%),
+    linear-gradient(135deg,#0a1c35 0%,#102c50 52%,#123a6b 100%)}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:46px 46px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.5),transparent 78%)}
+.hero-inner{position:relative;z-index:1}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--emerald-light);margin:0 0 8px}
+.hero h1{font-size:clamp(24px,3.2vw,32px);line-height:1.12;letter-spacing:-.03em;font-weight:800;max-width:860px}
+.hl{color:#a7f3d0}
+.hero-sub{margin:12px 0 0;max-width:780px;font-size:.94rem;color:rgba(255,255,255,.78)}
+.hero .selos{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+.hero .selos span{font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);color:#e8eef5}
+.hero .selos b{color:#a7f3d0}
+
+/* ---------- conteúdo ---------- */
+main.wrap{margin:22px auto 24px;padding-bottom:8px;position:relative;z-index:2}
+.topbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.topbar button{width:auto;padding:8px 16px;font-size:.85rem;margin:0;border-radius:999px;cursor:pointer;font-weight:700}
+.btn-navy{background:var(--navy);color:#fff;border:1.5px solid var(--navy)}
+.btn-navy:hover{background:var(--navy2);border-color:var(--navy2)}
+.btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--navy)}
+.btn-ghost:hover{border-color:var(--blue);color:var(--blue)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+@media(max-width:820px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+label{display:block;font-size:.72rem;color:var(--navy);margin:14px 0 5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+input,select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #c6d2df;background:#fff;color:var(--ink);font-size:.95rem}
+input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.12);outline:none}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:480px){.row{grid-template-columns:1fr}}
-button.primary{margin-top:16px;width:100%;padding:13px;border:0;border-radius:24px;background:var(--navy);color:#fff;font-weight:700;font-size:1rem;cursor:pointer}
-button.primary:hover{background:#163a63}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.res{font-size:2rem;font-weight:800;color:var(--navy);font-family:Georgia,serif}
+button.primary{margin-top:18px;width:100%;padding:13px;border:1px solid var(--blue);border-radius:10px;background:var(--blue);color:#fff;font-weight:800;font-size:.98rem;cursor:pointer;transition:background .18s,border-color .18s}
+button.primary:hover{background:var(--blue-dark);border-color:var(--blue-dark)}
+.res{font-size:2rem;font-weight:800;color:var(--navy);font-family:var(--font);letter-spacing:-.03em}
 table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
-td{padding:8px 4px;border-bottom:1px solid var(--line)} td:last-child{text-align:right}
-.neg{color:#b91c1c} .mut{color:var(--mut);font-size:.8rem}
-.badge{display:inline-block;background:var(--navy);color:#fff;padding:4px 12px;border-radius:20px;font-size:.75rem;margin-bottom:8px;font-weight:700;letter-spacing:.03em}
-details{margin-top:12px;font-size:.85rem;color:var(--mut)} summary{cursor:pointer;color:var(--navy);font-weight:600}
-.legal{font-size:.78rem;color:var(--mut);margin-top:14px;line-height:1.5}
-.warn{background:#fef3c7;border:1px solid var(--gold);border-radius:8px;padding:10px;font-size:.82rem;margin-top:10px;color:#713f12}
-.err{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px;font-size:.85rem;margin-top:10px;color:#991b1b}
+td{padding:8px 4px;border-bottom:1px solid var(--line)}
+td:last-child{text-align:right}
+.neg{color:var(--red)}
+.mut{color:var(--muted);font-size:.8rem}
+.badge{display:inline-block;background:var(--blue-soft);color:var(--blue);padding:4px 12px;border-radius:999px;font-size:.7rem;margin-bottom:8px;font-weight:800;letter-spacing:.06em}
+details{margin-top:12px;font-size:.85rem;color:var(--muted)}
+summary{cursor:pointer;color:var(--navy);font-weight:700}
+summary:hover{color:var(--blue)}
+.legal{font-size:.78rem;color:var(--muted);margin-top:14px;line-height:1.6;border-top:1px dashed var(--line);padding-top:10px}
+.warn{background:var(--amberbg);border:1px solid var(--amber-line);border-radius:10px;padding:10px 12px;font-size:.82rem;margin-top:10px;color:var(--amber)}
+.err{background:var(--redbg);border:1px solid var(--red-line);border-radius:10px;padding:10px 12px;font-size:.85rem;margin-top:10px;color:var(--red)}
 body.cliente .tec{display:none!important}
 body.cliente .legal{display:none!important}
+
+/* ---------- rodapé (padrão Hub Fiscal) ---------- */
+.rodape{background:var(--navy);color:rgba(255,255,255,.7);padding:26px 0 0;font-size:13px;margin-top:44px}
+.rodape .cols{display:grid;grid-template-columns:minmax(0,1fr);gap:22px 28px;align-items:start}
+.rodape h4{font-size:.95rem;font-weight:800;color:#fff;margin-bottom:8px}
+.rodape p{margin:4px 0;color:inherit}
+.rodape a{color:#fff}
+.rodape code{background:rgba(255,255,255,.12);color:#fff;padding:1px 6px;border-radius:4px;font-size:11.5px}
+@media(min-width:820px){.rodape .cols{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.rodape .contato-icones{display:flex;gap:10px;margin-top:10px}
+.rodape .contato-icones a{width:38px;height:38px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.2);border-radius:10px;color:#fff;transition:background .18s,border-color .18s}
+.rodape .contato-icones a:hover{background:var(--emerald);border-color:var(--emerald)}
+.rodape .contato-icones svg{width:19px;height:19px}
+.rodape .aviso{margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.15);font-size:12px;color:rgba(255,255,255,.55)}
+
 @media print{
 @page{size:A4;margin:8mm}
 html,body{background:#fff!important}
 body{font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.hero{background:#0f2c4d!important;color:#fff!important;padding:12px 16px 10px;border-bottom:3px solid var(--gold)}
+.corp-bar,.topbar,.rodape,.no-print,#err button{display:none!important}
+.hero{background:#0b1f3a!important;color:#fff!important;padding:12px 16px 10px;border-radius:0}
 .hero h1{font-size:1.15rem;margin:4px 0}
-.hero h1 span{font-size:.8rem}
-.hero .sub{font-size:.75rem;color:#e8ecf3!important}
-.pills{display:none!important}
-.wrap{padding:8px 0;max-width:100%}
-.topbar,.no-print,#err button{display:none!important}
+.hero .selos{display:none!important}
+.hero-sub{font-size:.75rem;color:#e8ecf3!important}
+.wrap{max-width:100%!important;padding:8px 0}
+main.wrap{margin:0 auto}
 .grid{grid-template-columns:1fr 1fr!important;gap:10px}
 .card{padding:10px;box-shadow:none;break-inside:avoid;page-break-inside:avoid}
 label{margin:6px 0 2px;font-size:.66rem}
 input,select{padding:5px 7px;font-size:.82rem}
 button.primary{display:none!important}
 .res{font-size:1.35rem;color:#000!important}
-table{font-size:.75rem;margin-top:6px} td{padding:3px 2px}
-details{margin-top:6px;font-size:.72rem} .legal{font-size:.68rem;margin-top:6px}
+table{font-size:.75rem;margin-top:6px}td{padding:3px 2px}
+details{margin-top:6px;font-size:.72rem}.legal{font-size:.68rem;margin-top:6px}
 .warn,.err{font-size:.72rem;padding:6px}
 }
 </style>
 </head>
 <body>
-<div class="hero"><div class="hero-inner">
-<div class="brand">VMF CONTABILIDADE</div>
-<h1>Simulador tributário IBS / CBS — Imóveis <span>Alienação · Locação · Hospedagem</span></h1>
-<div class="sub">Espelho didático do Decreto 12.955/2026 e Res. CGIBS 6/2026 — Cap. V Bens Imóveis + Hotelaria · LC 214/2025</div>
-<div class="pills"><span class="pill">Fonte: <b>Decreto 12.955 + CGIBS 6</b></span><span class="pill">Alienação <b>−50%</b></span><span class="pill">Locação <b>−70%</b></span><span class="pill">Hospedagem <b>−40%</b></span></div>
-</div></div>
-<div class="wrap">
+<header class="corp-bar">
+  <div class="corp-inner">
+    <div class="corp-brand">
+      <div class="corp-logo" aria-hidden="true"><img src="logo.svg" alt="" width="36" height="36"></div>
+      <div>
+        <strong>Simulador tributário · IBS / CBS</strong>
+        <small>Imóveis · Alienação · Locação · Hospedagem</small>
+      </div>
+    </div>
+    <nav class="corp-nav" aria-label="Navegação principal">
+      <a class="btn-top" href="https://github.com/silvioalbqrq/alienacao-imovel" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="wrap hero-inner">
+    <p class="eyebrow">Reforma Tributária · LC 214/2025 · Decreto 12.955/2026 · CGIBS 6/2026</p>
+    <h1 id="hero-title">Simulador tributário <span class="hl">IBS / CBS</span> — Imóveis</h1>
+    <p class="hero-sub">Alienação, locação mensal e hospedagem ≤90 dias: base de cálculo, redutores e alíquotas efetivas de IBS e CBS. Cálculo 100% no seu navegador.</p>
+    <div class="selos">
+      <span>Fonte: <b>Decreto 12.955 + CGIBS 6</b></span>
+      <span>Alienação <b>−50%</b></span>
+      <span>Locação <b>−70%</b></span>
+      <span>Hospedagem <b>−40%</b></span>
+    </div>
+  </div>
+</section>
+
+<main class="wrap">
 <div class="topbar no-print">
 <button class="btn-navy" id="bModo" type="button">Modo: Escritório</button>
 <button class="btn-ghost" id="bExp" type="button">Exportar PDF / Imprimir</button>
@@ -147,7 +245,34 @@ details{margin-top:6px;font-size:.72rem} .legal{font-size:.68rem;margin-top:6px}
 <div id="memoria" class="tec"></div>
 </div>
 </div>
-</div>
+</main>
+
+<footer class="rodape">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Simulador tributário IBS / CBS — Imóveis</h4>
+        <p>Alienação · Locação mensal · Hospedagem ≤90 dias</p>
+        <p>Espelho didático do Decreto 12.955/2026 (CBS) e da Resolução CGIBS 6/2026 (IBS) — LC 214/2025.</p>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <div class="contato-icones">
+          <a href="mailto:silvio.albqrq@gmail.com" aria-label="E-mail silvio.albqrq@gmail.com" title="E-mail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,6 12,13 2,6"/></svg></a>
+          <a href="https://wa.me/5585998206642?text=Ol%C3%A1%2C%20vim%20pelo%20site%20Simulador%20Im%C3%B3veis" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp +55 85 99820-6642" title="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></a>
+          <a href="https://github.com/silvioalbqrq" target="_blank" rel="noopener noreferrer" aria-label="GitHub @silvioalbqrq" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 6.8 9.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.2-3.4-1.2-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.2-.4-1.3.1-2.6 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.4.1 2.6.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 22 12 10 10 0 0 0 12 2Z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Base legal</h4>
+        <p>LC 214/2025 · Decreto 12.955/2026 · Res. CGIBS 6/2026</p>
+        <p>Arts. 359-382 (bens imóveis) e 361/402-410 (hotelaria).</p>
+      </div>
+    </div>
+    <p class="aviso">Ferramenta de estudo/simulação — não constitui parecer fiscal. Redutores corrigidos pelo IPCA, Sinter/CIB e transição do art. 463 exigem análise do caso concreto. Valide com a legislação vigente e um contador responsável.</p>
+  </div>
+</footer>
+
 <script>
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
@@ -168,8 +293,8 @@ function exportar(){
  const data=new Date().toLocaleString('pt-BR');
  const Kv=id=>{const el=$(id);return el?el.value:'';};
  const entradas={operacao:operTxt,venda:Kv('venda'),redutor:Kv('redutor'),tipo:Kv('tipo'),aluguel:Kv('aluguel'),trib:Kv('l_trib'),cond:Kv('l_cond'),foro:Kv('l_foro'),perc:Kv('l_perc'),uso:Kv('l_tipo'),vhosp:Kv('vhosp'),dias:Kv('dias'),cbs:Kv('cbs'),ibs:Kv('ibs'),regime:Kv('regime')};
- const doc='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório — Simulador Imóveis IBS/CBS</title><style>body{font-family:Arial,sans-serif;max-width:720px;margin:20px auto;color:#111}h1{font-size:18px;color:#0f2c4d;border-bottom:3px solid #c9a24a;padding-bottom:8px}table{width:100%;border-collapse:collapse;margin:12px 0}td{border-bottom:1px solid #ddd;padding:6px;font-size:13px}td:last-child{text-align:right}.res{font-size:26px;font-weight:800;color:#0f2c4d}.mut{color:#555;font-size:12px}.box{border:1px solid #c9a24a;border-radius:8px;padding:12px;margin:12px 0}@media print{@page{size:A4;margin:10mm}}</style></head><body>'
- +'<h1>VMF Contabilidade — Relatório IBS/CBS Imóveis</h1><p class="mut">Gerado em '+esc(data)+' · Dec. 12.955/2026 + Res. CGIBS 6/2026 · LC 214/2025</p>'
+ const doc='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório — Simulador Imóveis IBS/CBS</title><style>body{font-family:Arial,sans-serif;max-width:720px;margin:20px auto;color:#111}h1{font-size:18px;color:#0b1f3a;border-bottom:3px solid #0f9f6e;padding-bottom:8px}table{width:100%;border-collapse:collapse;margin:12px 0}td{border-bottom:1px solid #dfe7f1;padding:6px;font-size:13px}td:last-child{text-align:right}.res{font-size:26px;font-weight:800;color:#0b1f3a}.mut{color:#555;font-size:12px}.box{border:1px solid #dfe7f1;border-radius:8px;padding:12px;margin:12px 0}@media print{@page{size:A4;margin:10mm}}</style></head><body>'
+ +'<h1>Simulador tributário IBS/CBS — Imóveis</h1><p class="mut">Gerado em '+esc(data)+' · Dec. 12.955/2026 + Res. CGIBS 6/2026 · LC 214/2025</p>'
  +'<div class="box"><b>Operação:</b> '+esc(operTxt)+'<br><span class="mut">Entradas: '+esc(JSON.stringify(entradas))+'</span></div>'
  +'<div class="box">'+res+'</div>'
  +'<p class="mut">'+esc(mem).slice(0,2000)+'</p>'

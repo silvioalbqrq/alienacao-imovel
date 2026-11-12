@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Simulador tributário IBS/CBS — Imóveis">
+  <rect width="64" height="64" rx="14" fill="#ffffff"/>
+  <path d="M32 11 L55 32 H50 V50 A3 3 0 0 1 47 53 H17 A3 3 0 0 1 14 50 V32 H9 Z" fill="#0b1f3a"/>
+  <path d="M36 36.5 L28 48.5" stroke="#34d399" stroke-width="3.6" stroke-linecap="round"/>
+  <circle cx="28.5" cy="38" r="2.8" fill="#34d399"/>
+  <circle cx="35.5" cy="47" r="2.8" fill="#34d399"/>
+</svg>

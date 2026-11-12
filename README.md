@@ -4,7 +4,7 @@ Alienação · Locação mensal · Hospedagem ≤90 dias
 
 Espelho didático do **Decreto 12.955/2026 (CBS)** e **Resolução CGIBS 6/2026 (IBS)** — Título VI Cap. V Bens Imóveis + Hotelaria. Base: **LC 214/2025**.
 
-Visual padrão VMF Contabilidade (azul-marinho + dourado).
+Visual padrão Hub Fiscal (azul-marinho, azul e esmeralda), com logotipo e favicon próprios.
 
 ## Demo
 
@@ -51,8 +51,15 @@ Ferramenta de estudo/simulação. Não constitui parecer fiscal. Redutores corri
 ## Estrutura
 
 ```
-index.html  — simulador completo (HTML+CSS+JS)
-README.md   — este arquivo
+index.html        — simulador completo (HTML+CSS+JS)
+favicon.svg       — favicon vetorial
+logo.svg          — marca (casa + %)
+logo-text.svg     — marca + texto
+logo-white.svg    — versão para fundo escuro
+favicon.ico       — 16/32/48
+*.png             — favicons, apple-touch e android
+site.webmanifest  — manifest PWA
+README.md         — este arquivo
 ```
 
 MIT — uso livre com atribuição.
